@@ -141,5 +141,20 @@ SELECT * FROM utilisateur_gmail_vw;
 
 CREATE VIEW aliment_non_bio_vw AS 
   (SELECT * FROM aliment WHERE `bio`=0 ORDER BY proteines DESC);
-
 SELECT * FROM aliment_non_bio_vw ;
+
+SELECT *
+FROM `utilisateur`
+JOIN `langue`
+ON utilisateur.langue_id = langue.id
+WHERE langue.nom="anglais";
+/* JOIN permet de joindre 2 tables pour la lecture
+ON est la pour specifier la correspondance de jointure entre les deux tables
+il est possible d'ajouter un WHERE sur le JOIN*/
+
+SELECT utilisateur.nom, langue.nom
+FROM utilisateur
+JOIN langue
+ON utilisateur.langue_id = langue.id
+WHERE langue.id = 1;
+
