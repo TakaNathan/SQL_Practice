@@ -143,40 +143,36 @@ CREATE VIEW aliment_non_bio_vw AS
   (SELECT * FROM aliment WHERE `bio`=0 ORDER BY proteines DESC);
 SELECT * FROM aliment_non_bio_vw ;
 
-SELECT *
-FROM `utilisateur`
-JOIN `langue`
-ON utilisateur.langue_id = langue.id
-WHERE langue.nom="anglais";
-/* JOIN permet de joindre 2 tables pour la lecture
-ON est la pour specifier la correspondance de jointure entre les deux tables
-il est possible d'ajouter un WHERE sur le JOIN*/
+/* Modification de la structure d'une BDD*/
 
-SELECT utilisateur.nom AS 'nom de famille', langue.nom
-FROM utilisateur
-JOIN langue
-ON utilisateur.langue_id = langue.id
-WHERE langue.id = 1;
+/* Ajout d'un nouveau champ Vitaminces_c dans la table aliment */
 
-/* Relation plusieurs a plusieurs entre 2 tables*/
+ALTER TABLE aliment ADD vitaminces_c FLOAT DEFAULT 0,0;
 
-CREATE VIEW many_many AS (
-    SELECT utilisateur.nom AS "User Name",
-          utilisateur.email ,
-          aliment.nom AS "Fruit Name"
-    FROM aliment
-    JOIN utilisateur_aliment 
-    ON aliment.id = utilisateur_aliment.aliment_id
-    JOIN utilisateur
-    ON utilisateur.id = utilisateur_aliment.utilisateur_id
-    WHERE (utilisateur.email LIKE "%gmail%")
+/* Ajout du champ code ISO dans la table langue */
 
-    /* 1 et 2 permettent de relier la requete avec le tableau
-    de liaison utilisateur_aliment et le ON inclut la relation entre
-    les id des differents id utilisateur et aliment*/
-);
+ALTER TABLE langue ADD code_ISO VARCHAR(10);
 
-SELECT * FROM many_many ORDER BY utilisateur.name DESC
+/* Surpression du champ bio dans aliment*/
 
+ALTER TABLE aliment DROP bio;
 
+/* Surpression du champ nom dans utilisateurt*/
 
+ALTER TABLE utilisateur DROP nom;
+
+/* Modification du type du champ calories dans aliment*/
+
+ALTER TABLE aliment MODIFY calories FLOAT;
+
+/* Modification du type du champ email dans utilisateur */
+
+ALTER TABLE utilisateur MODIFY email VARCHAR(500);
+
+/* Changement du nom du champ sucre dans alimentt */
+
+ALTER TABLE aliment CHANGE sucre sucres FLOAT;
+
+/* Changement du nom du champ code dans langue */
+
+ALTER TABLE langue CHANGE code_ISO code_pays VARCHAR(10);
