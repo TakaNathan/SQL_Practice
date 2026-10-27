@@ -1,23 +1,3 @@
--- MySQL dump 10.13  Distrib 8.0.22, for osx10.16 (x86_64)
---
--- Host: localhost    Database: foodly_screencasts
--- ------------------------------------------------------
--- Server version	8.0.22
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!50503 SET NAMES utf8mb4 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-
---
--- Table structure for table `aliment`
---
 
 DROP TABLE IF EXISTS `aliment`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -142,31 +122,38 @@ SET @saved_cs_client     = @@character_set_client;
  1 AS `langue_id`*/;
 SET character_set_client = @saved_cs_client;
 
---
--- Final view structure for view `utilisateurs_gmail_vw`
---
+SELECT *
+FROM `utilisateur`
+JOIN `langue`
+ON utilisateur.langue_id = langue.id
+WHERE langue.nom="anglais";
+/* JOIN permet de joindre 2 tables pour la lecture
+ON est la pour specifier la correspondance de jointure entre les deux tables
+il est possible d'ajouter un WHERE sur le JOIN*/
 
-/*!50001 DROP VIEW IF EXISTS `utilisateurs_gmail_vw`*/;
-/*!50001 SET @saved_cs_client          = @@character_set_client */;
-/*!50001 SET @saved_cs_results         = @@character_set_results */;
-/*!50001 SET @saved_col_connection     = @@collation_connection */;
-/*!50001 SET character_set_client      = utf8mb4 */;
-/*!50001 SET character_set_results     = utf8mb4 */;
-/*!50001 SET collation_connection      = utf8mb4_0900_ai_ci */;
-/*!50001 CREATE ALGORITHM=UNDEFINED */
-/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
-/*!50001 VIEW `utilisateurs_gmail_vw` AS select `utilisateur`.`id` AS `id`,`utilisateur`.`nom` AS `nom`,`utilisateur`.`prenom` AS `prenom`,`utilisateur`.`email` AS `email`,`utilisateur`.`langue_id` AS `langue_id` from `utilisateur` where (`utilisateur`.`email` like '%gmail.com') */;
-/*!50001 SET character_set_client      = @saved_cs_client */;
-/*!50001 SET character_set_results     = @saved_cs_results */;
-/*!50001 SET collation_connection      = @saved_col_connection */;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+SELECT utilisateur.nom AS 'nom de famille', langue.nom
+FROM utilisateur
+JOIN langue
+ON utilisateur.langue_id = langue.id
+WHERE langue.id = 1;
 
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+/* Relation plusieurs a plusieurs entre 2 tables*/
 
--- Dump completed on 2020-12-17 22:24:54
+CREATE VIEW many_many AS (
+    SELECT utilisateur.nom AS "User Name",
+          utilisateur.email ,
+          aliment.nom AS "Fruit Name"
+    FROM aliment
+    JOIN utilisateur_aliment 
+    ON aliment.id = utilisateur_aliment.aliment_id
+    JOIN utilisateur
+    ON utilisateur.id = utilisateur_aliment.utilisateur_id
+    WHERE (utilisateur.email LIKE "%gmail%")
+
+    /* 1 et 2 permettent de relier la requete avec le tableau
+    de liaison utilisateur_aliment et le ON inclut la relation entre
+    les id des differents id utilisateur et aliment*/
+);
+
+SELECT * FROM many_many ORDER BY utilisateur.name DESC
+
