@@ -152,9 +152,31 @@ WHERE langue.nom="anglais";
 ON est la pour specifier la correspondance de jointure entre les deux tables
 il est possible d'ajouter un WHERE sur le JOIN*/
 
-SELECT utilisateur.nom, langue.nom
+SELECT utilisateur.nom AS 'nom de famille', langue.nom
 FROM utilisateur
 JOIN langue
 ON utilisateur.langue_id = langue.id
 WHERE langue.id = 1;
+
+/* Relation plusieurs a plusieurs entre 2 tables*/
+
+CREATE VIEW many_many AS (
+    SELECT utilisateur.nom AS "User Name",
+          utilisateur.email ,
+          aliment.nom AS "Fruit Name"
+    FROM aliment
+    JOIN utilisateur_aliment 
+    ON aliment.id = utilisateur_aliment.aliment_id
+    JOIN utilisateur
+    ON utilisateur.id = utilisateur_aliment.utilisateur_id
+    WHERE (utilisateur.email LIKE "%gmail%")
+
+    /* 1 et 2 permettent de relier la requete avec le tableau
+    de liaison utilisateur_aliment et le ON inclut la relation entre
+    les id des differents id utilisateur et aliment*/
+);
+
+SELECT * FROM many_many ORDER BY utilisateur.name DESC
+
+
 
